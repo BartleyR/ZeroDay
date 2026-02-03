@@ -1,0 +1,35 @@
+{
+  "Name": "Day Zero",
+  "Version": "1.0.0",
+  "Author": "Bartley Richardson",
+  "Description": "Count down days to your next big event with customizable styling and colors",
+  "Category": "Day Zero",
+  "CategoryIcon": "images/category-icon",
+  "Icon": "images/plugin-icon",
+  "URL": "https://github.com/BartleyR/ZeroDay",
+  "CodePath": "plugin.html",
+  "SDKVersion": 2,
+  "Software": {
+    "MinimumVersion": "6.0"
+  },
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "10.13"
+    }
+  ],
+  "Actions": [
+    {
+      "Name": "Day Zero",
+      "UUID": "com.yourdomain.dayzero.action",
+      "Icon": "images/action-icon",
+      "Tooltip": "Display countdown to a specific date",
+      "PropertyInspectorPath": "propertyInspector/index.html",
+      "States": [
+        {
+          "Image": "images/action-icon"
+        }
+      ]
+    }
+  ]
+}

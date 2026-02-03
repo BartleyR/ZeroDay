@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Icon Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin: 10px;
+      background: white;
+    }
+    .download-section {
+      margin: 20px 0;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Stream Deck Icon Generator</h1>
+  <p>Right-click on each canvas and "Save Image As..." to save the icons.</p>
+
+  <div class="download-section">
+    <h2>Action Icon (144x144)</h2>
+    <canvas id="action-icon" width="144" height="144"></canvas>
+    <button onclick="downloadCanvas('action-icon', 'action-icon.png')">Download</button>
+  </div>
+
+  <div class="download-section">
+    <h2>Action Icon @2x (288x288)</h2>
+    <canvas id="action-icon-2x" width="288" height="288"></canvas>
+    <button onclick="downloadCanvas('action-icon-2x', 'action-icon@2x.png')">Download</button>
+  </div>
+
+  <div class="download-section">
+    <h2>Plugin Icon (144x144)</h2>
+    <canvas id="plugin-icon" width="144" height="144"></canvas>
+    <button onclick="downloadCanvas('plugin-icon', 'plugin-icon.png')">Download</button>
+  </div>
+
+  <div class="download-section">
+    <h2>Plugin Icon @2x (288x288)</h2>
+    <canvas id="plugin-icon-2x" width="288" height="288"></canvas>
+    <button onclick="downloadCanvas('plugin-icon-2x', 'plugin-icon@2x.png')">Download</button>
+  </div>
+
+  <div class="download-section">
+    <h2>Category Icon (144x144)</h2>
+    <canvas id="category-icon" width="144" height="144"></canvas>
+    <button onclick="downloadCanvas('category-icon', 'category-icon.png')">Download</button>
+  </div>
+
+  <div class="download-section">
+    <h2>Category Icon @2x (288x288)</h2>
+    <canvas id="category-icon-2x" width="288" height="288"></canvas>
+    <button onclick="downloadCanvas('category-icon-2x', 'category-icon@2x.png')">Download</button>
+  </div>
+
+  <script>
+    function drawActionIcon(canvas) {
+      const ctx = canvas.getContext('2d');
+      const scale = canvas.width / 144;
+      const centerX = canvas.width / 2;
+
+      // Gradient background
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#1a1a2e');
+      gradient.addColorStop(1, '#16213e');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Top accent bar with gradient
+      const barGradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+      barGradient.addColorStop(0, '#667eea');
+      barGradient.addColorStop(1, '#764ba2');
+      ctx.fillStyle = barGradient;
+      ctx.fillRect(0, 0, canvas.width, 6 * scale);
+
+      // Circle background for number
+      ctx.fillStyle = 'rgba(102, 126, 234, 0.15)';
+      ctx.beginPath();
+      ctx.arc(centerX, 72 * scale, 45 * scale, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Question mark or number
+      const mainGradient = ctx.createLinearGradient(0, 50 * scale, 0, 100 * scale);
+      mainGradient.addColorStop(0, '#667eea');
+      mainGradient.addColorStop(1, '#764ba2');
+      ctx.fillStyle = mainGradient;
+      ctx.font = `bold ${56 * scale}px -apple-system, Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('?', centerX, 72 * scale);
+
+      // "Set Date" text
+      ctx.fillStyle = '#8b92c4';
+      ctx.font = `${14 * scale}px -apple-system, Arial`;
+      ctx.fillText('Set Date', centerX, 122 * scale);
+    }
+
+    function drawPluginIcon(canvas) {
+      const ctx = canvas.getContext('2d');
+      const scale = canvas.width / 144;
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+
+      // Gradient background
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, '#667eea');
+      gradient.addColorStop(1, '#764ba2');
+      ctx.fillStyle = gradient;
+      roundRect(ctx, 0, 0, canvas.width, canvas.height, 20 * scale);
+      ctx.fill();
+
+      // Modern calendar icon - outer rectangle
+      const calendarSize = 70 * scale;
+      const calendarX = centerX - (calendarSize / 2);
+      const calendarY = centerY - (calendarSize / 2) + (5 * scale);
+
+      // Calendar body
+      ctx.fillStyle = '#FFFFFF';
+      roundRect(ctx, calendarX, calendarY, calendarSize, calendarSize, 8 * scale);
+      ctx.fill();
+
+      // Calendar header bar
+      ctx.fillStyle = '#667eea';
+      roundRect(ctx, calendarX, calendarY, calendarSize, 18 * scale, 8 * scale);
+      ctx.fillRect(calendarX, calendarY + (10 * scale), calendarSize, 10 * scale);
+
+      // Calendar binding clips
+      ctx.fillStyle = '#FFFFFF';
+      const clipWidth = 6 * scale;
+      const clipHeight = 12 * scale;
+      ctx.fillRect(calendarX + (15 * scale), calendarY - (3 * scale), clipWidth, clipHeight);
+      ctx.fillRect(calendarX + calendarSize - (21 * scale), calendarY - (3 * scale), clipWidth, clipHeight);
+
+      // Number "7" in the center (representing countdown)
+      ctx.fillStyle = '#667eea';
+      ctx.font = `bold ${40 * scale}px -apple-system, Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('7', centerX, calendarY + (48 * scale));
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+    }
+
+    function downloadCanvas(canvasId, filename) {
+      const canvas = document.getElementById(canvasId);
+      const url = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = url;
+      link.click();
+    }
+
+    // Draw all icons on load
+    window.onload = function() {
+      drawActionIcon(document.getElementById('action-icon'));
+      drawActionIcon(document.getElementById('action-icon-2x'));
+      drawPluginIcon(document.getElementById('plugin-icon'));
+      drawPluginIcon(document.getElementById('plugin-icon-2x'));
+      drawPluginIcon(document.getElementById('category-icon'));
+      drawPluginIcon(document.getElementById('category-icon-2x'));
+    };
+  </script>
+</body>
+</html>

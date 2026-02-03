@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# Build script for Stream Deck Day Zero Plugin
+
+set -e
+
+PLUGIN_NAME="com.yourdomain.dayzero.sdPlugin"
+
+echo "Building Stream Deck Day Zero Plugin..."
+
+# Remove old build if it exists
+if [ -d "$PLUGIN_NAME" ]; then
+  echo "Removing old build..."
+  rm -rf "$PLUGIN_NAME"
+fi
+
+# Create plugin bundle directory
+echo "Creating plugin bundle..."
+mkdir -p "$PLUGIN_NAME"
+
+# Copy files
+echo "Copying files..."
+cp manifest.json "$PLUGIN_NAME/"
+cp plugin.html "$PLUGIN_NAME/"
+cp -r plugin "$PLUGIN_NAME/"
+cp -r propertyInspector "$PLUGIN_NAME/"
+cp -r images "$PLUGIN_NAME/"
+
+# Check if icon images exist
+echo "Checking for icon images..."
+REQUIRED_ICONS=(
+  "action-icon.png"
+  "action-icon@2x.png"
+  "plugin-icon.png"
+  "plugin-icon@2x.png"
+  "category-icon.png"
+  "category-icon@2x.png"
+)
+
+MISSING_ICONS=false
+for icon in "${REQUIRED_ICONS[@]}"; do
+  if [ ! -f "images/$icon" ]; then
+    echo "WARNING: Missing icon: images/$icon"
+    MISSING_ICONS=true
+  fi
+done
+
+if [ "$MISSING_ICONS" = true ]; then
+  echo ""
+  echo "⚠️  Some icon images are missing!"
+  echo "Please generate them using images/icon-generator.html"
+  echo "Then run this script again."
+  echo ""
+  exit 1
+fi
+
+echo "✓ Build complete: $PLUGIN_NAME"
+echo ""
+echo "======================================"
+echo "Next Steps:"
+echo "======================================"
+echo ""
+echo "1. Install the plugin:"
+echo "   Run: open '$PLUGIN_NAME'"
+echo "   (or double-click '$PLUGIN_NAME' in Finder)"
+echo ""
+echo "2. Restart the Stream Deck application"
+echo ""
+echo "3. The plugin will appear in Stream Deck:"
+echo "   • Look for 'Day Zero' in the actions list"
+echo "   • Drag it onto a button"
+echo "   • Configure the command in the Property Inspector"
+echo ""
+echo "4. Test your plugin:"
+echo "   • Press the button on your Stream Deck"
+echo "   • Check that your command executes"
+echo ""
+echo "5. Development tips:"
+echo "   • View logs: tail -f ~/Library/Logs/com.elgato.StreamDeck/StreamDeck0.log"
+echo "   • After changes: rebuild and restart Stream Deck"
+echo ""

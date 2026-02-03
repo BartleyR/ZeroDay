@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Day Zero Hero Image Generator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    #hero-canvas {
+      border: 1px solid #333;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .controls {
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 8px;
+      color: white;
+    }
+
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 5px;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="hero-canvas"></canvas>
+  <div class="controls">
+    <button onclick="downloadImage()">Download Hero Image (1200x630)</button>
+    <button onclick="regenerate()">Regenerate</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Hero image dimensions (GitHub/social media standard)
+    canvas.width = 1200;
+    canvas.height = 630;
+
+    function drawHero() {
+      // Background gradient
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      gradient.addColorStop(0, '#1a1a2e');
+      gradient.addColorStop(1, '#0f0f1e');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Add subtle grid pattern
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i < canvas.width; i += 40) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, canvas.height);
+        ctx.stroke();
+      }
+      for (let i = 0; i < canvas.height; i += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(canvas.width, i);
+        ctx.stroke();
+      }
+
+      // Title
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 72px Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Day Zero', canvas.width / 2, 120);
+
+      // Subtitle
+      ctx.fillStyle = '#aaaaaa';
+      ctx.font = '32px Arial, sans-serif';
+      ctx.fillText('Stream Deck Countdown Plugin', canvas.width / 2, 170);
+
+      // Draw three example Stream Deck buttons
+      const buttonSize = 144;
+      const buttonSpacing = 40;
+      const totalWidth = (buttonSize * 3) + (buttonSpacing * 2);
+      const startX = (canvas.width - totalWidth) / 2;
+      const startY = 280;
+
+      // Example 1: Vacation countdown
+      drawStreamDeckButton(ctx, startX, startY, buttonSize, {
+        eventName: 'Vacation',
+        days: 42,
+        bannerColor: '#4CAF50',
+        bannerTextColor: '#FFFFFF',
+        backgroundColor: '#000000',
+        textColor: '#FFFFFF'
+      });
+
+      // Example 2: Birthday countdown
+      drawStreamDeckButton(ctx, startX + buttonSize + buttonSpacing, startY, buttonSize, {
+        eventName: 'Birthday',
+        days: 15,
+        bannerColor: '#FF4081',
+        bannerTextColor: '#FFFFFF',
+        backgroundColor: '#000000',
+        textColor: '#FFFFFF'
+      });
+
+      // Example 3: Launch countdown
+      drawStreamDeckButton(ctx, startX + (buttonSize + buttonSpacing) * 2, startY, buttonSize, {
+        eventName: 'Launch',
+        days: 7,
+        bannerColor: '#2196F3',
+        bannerTextColor: '#FFFFFF',
+        backgroundColor: '#000000',
+        textColor: '#FFFFFF'
+      });
+
+      // Feature highlights
+      ctx.fillStyle = '#888888';
+      ctx.font = '20px Arial, sans-serif';
+      ctx.textAlign = 'center';
+      const features = '✨ Customizable Colors  •  📅 Any Date  •  🎨 Multiple Styles  •  ⏰ Auto-Updates';
+      ctx.fillText(features, canvas.width / 2, 570);
+    }
+
+    function drawStreamDeckButton(ctx, x, y, size, options) {
+      const {
+        eventName,
+        days,
+        bannerColor,
+        bannerTextColor,
+        backgroundColor,
+        textColor
+      } = options;
+
+      // Drop shadow
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+      ctx.shadowBlur = 20;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 10;
+
+      // Background
+      ctx.fillStyle = backgroundColor;
+      ctx.fillRect(x, y, size, size);
+
+      // Reset shadow
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+
+      // Banner
+      const bannerHeight = 40;
+      ctx.fillStyle = bannerColor;
+      ctx.fillRect(x, y, size, bannerHeight);
+
+      // Banner text
+      ctx.fillStyle = bannerTextColor;
+      ctx.font = 'bold 20px Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(eventName.toUpperCase(), x + size / 2, y + bannerHeight / 2);
+
+      // Days number
+      ctx.fillStyle = textColor;
+      ctx.font = 'bold 56px Arial, sans-serif';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(days.toString(), x + size / 2, y + size / 2 + 10);
+
+      // "days" label
+      ctx.font = '18px Arial, sans-serif';
+      ctx.fillText(days === 1 ? 'day' : 'days', x + size / 2, y + size - 30);
+
+      // Border
+      ctx.strokeStyle = '#333333';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x, y, size, size);
+    }
+
+    function downloadImage() {
+      const link = document.createElement('a');
+      link.download = 'day-zero-hero.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function regenerate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawHero();
+    }
+
+    // Initial draw
+    drawHero();
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "streamdeck-day-countdown",
+  "version": "1.0.0",
+  "description": "Stream Deck plugin to countdown days to a specific date",
+  "main": "plugin/index.js",
+  "scripts": {
+    "build": "echo 'No build step required for vanilla JS'"
+  },
+  "keywords": ["streamdeck", "plugin", "countdown"],
+  "author": "bartleyrichardson",
+  "license": "Apache-2.0"
+}
