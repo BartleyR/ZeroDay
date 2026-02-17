@@ -71,13 +71,16 @@ function updateCountdown(context) {
   }
 
   // Calculate days remaining
-  const target = new Date(targetDate);
+  // Parse the date string as local time, not UTC
+  const [year, month, day] = targetDate.split('-').map(Number);
+  const target = new Date(year, month - 1, day); // month is 0-indexed
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   target.setHours(0, 0, 0, 0);
 
   const diffTime = target - today;
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
   // Draw the countdown
   drawCountdown(context, diffDays, eventName, settings);
