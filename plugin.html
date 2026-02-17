@@ -126,18 +126,52 @@ function drawCountdown(context, days, eventName, settings) {
 
   ctx.fillText(displayName, 72, 20);
 
-  // Days number (large)
-  ctx.fillStyle = textColor;
-  ctx.font = `bold ${numberFontSize}px ${numberFontFamily}`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(String(days), 72, 80);
+  // Check if today is the event day
+  if (days === 0) {
+    // Draw a yellow star
+    ctx.fillStyle = '#FFD700'; // Gold/yellow color
+    ctx.beginPath();
+    const centerX = 72;
+    const centerY = 80;
+    const outerRadius = 35;
+    const innerRadius = 15;
+    const points = 5;
 
-  // "days" label
-  ctx.font = `bold ${labelFontSize}px ${numberFontFamily}`;
-  const label = Math.abs(days) === 1 ? 'day' : 'days';
-  const prefix = days < 0 ? 'ago' : '';
-  ctx.fillText(`${label} ${prefix}`.trim(), 72, 115);
+    for (let i = 0; i < points * 2; i++) {
+      const radius = i % 2 === 0 ? outerRadius : innerRadius;
+      const angle = (i * Math.PI) / points - Math.PI / 2;
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+
+      if (i === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    }
+    ctx.closePath();
+    ctx.fill();
+
+    // Display "Today" label
+    ctx.fillStyle = textColor;
+    ctx.font = `bold ${labelFontSize}px ${numberFontFamily}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Today', 72, 115);
+  } else {
+    // Days number (large)
+    ctx.fillStyle = textColor;
+    ctx.font = `bold ${numberFontSize}px ${numberFontFamily}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(String(days), 72, 80);
+
+    // "days" label
+    ctx.font = `bold ${labelFontSize}px ${numberFontFamily}`;
+    const label = Math.abs(days) === 1 ? 'day' : 'days';
+    const prefix = days < 0 ? 'ago' : '';
+    ctx.fillText(`${label} ${prefix}`.trim(), 72, 115);
+  }
 
   // Convert canvas to base64 and send to Stream Deck
   const imageData = canvas.toDataURL('image/png').split(',')[1];
