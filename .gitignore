@@ -27,6 +27,10 @@ dist/
 build/
 *.sdPlugin/
 
+# Generated configuration files (use templates instead)
+manifest.json
+build-plugin.sh
+
 # IDE
 .vscode/
 .idea/

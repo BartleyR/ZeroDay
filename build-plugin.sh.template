@@ -4,7 +4,7 @@
 
 set -e
 
-PLUGIN_NAME="com.yourdomain.dayzero.sdPlugin"
+PLUGIN_NAME="{{DOMAIN}}.{{PLUGIN_ID}}.sdPlugin"
 
 echo "Building Stream Deck Day Zero Plugin..."
 

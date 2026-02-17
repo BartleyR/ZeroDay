@@ -21,7 +21,7 @@
   "Actions": [
     {
       "Name": "Day Zero",
-      "UUID": "com.yourdomain.dayzero.action",
+      "UUID": "{{DOMAIN}}.{{PLUGIN_ID}}.action",
       "Icon": "images/action-icon",
       "Tooltip": "Display countdown to a specific date",
       "PropertyInspectorPath": "propertyInspector/index.html",
